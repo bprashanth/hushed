@@ -39,9 +39,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget getWidget(EpubBook? book) {
     String author = 'none';
-    if (book != null && book.Author?.length != 0) {
-      author = book.Author!;
+    List<Widget> widgets = [Text('The author of the ebook is: $author')];
+    if (book != null) {
+      if (book.Author?.length != 0) {
+        author = book.Author!;
+      }
+      widgets[0] = Text('The author of the ebook is: $author');
+      if (book.Chapters != null && book.Chapters!.isNotEmpty) {
+        var it = book.Chapters?.iterator;
+        while (it != null && it.moveNext()) {
+          widgets.add(Text(it.current.Title!));
+        }
+      }
     }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -50,12 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'The author of the ebook is:',
-            ),
-            Text(author),
-          ],
+          children: widgets,
         ),
       ),
       floatingActionButton: FloatingActionButton(
